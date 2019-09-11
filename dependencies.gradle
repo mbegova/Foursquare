@@ -1,0 +1,80 @@
+allprojects {
+    ext {
+        supportLibraryVersion = "28.0.0"
+        retrofitVersion = "2.3.0"
+        gsonVersion = "2.8.4"
+        okhttpVersion = "3.8.1"
+        okioVersion = "1.14.0"
+        koinVersion = "2.0.0"
+        timberVersion = "4.7.1"
+        androidrxVersion = "1.0.1"
+        rxjava = "2.1.14"
+        ankoVersion = "0.10.4"
+        rxKotlinVersion = '2.1.0'
+        navigationVersion = "2.0.0"
+        constraitLayoutVersion = "1.1.3"
+        androidXLegacySupport = "1.0.0-beta01"
+        roomVersion = "2.0.0-rc01"
+        kotlinVersion = "1.3.31"
+        materialVersion = "1.1.0-alpha09"
+        glideVersion = "4.9.0"
+
+        dependencies = [
+                appCompat              : "com.android.support:appcompat-v7:$supportLibraryVersion",
+                designLibrary          : "com.android.support:design:$supportLibraryVersion",
+                recyclerView           : "androidx.recyclerview:recyclerview:1.0.0",
+                constraintLayout       : "com.android.support.constraint:constraint-layout:1.1.3",
+                kotlin                 : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion",
+                kotlinReflect          : "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion",
+                rxKotlin               : "io.reactivex.rxjava2:rxkotlin:${rxKotlinVersion}",
+                androidArcExtension    : "android.arch.lifecycle:extensions:1.1.1",
+                koin                   : "org.koin:koin-android-scope:${koinVersion}",
+                koinViewModel          : "org.koin:koin-android-viewmodel:${koinVersion}",
+                anko                   : "org.jetbrains.anko:anko-commons:$ankoVersion",
+                retrofit               : "com.squareup.retrofit2:retrofit:$retrofitVersion",
+                okio                   : "com.squareup.okio:okio:$okioVersion",
+                gson                   : "com.google.code.gson:gson:$gsonVersion",
+                gsonConverter          : "com.squareup.retrofit2:converter-gson:$retrofitVersion",
+                loggingInterceptor     : "com.squareup.okhttp3:logging-interceptor:$okhttpVersion",
+                rxJavaForAndroidArc    : "android.arch.work:work-rxjava2:$androidrxVersion",
+                timber                 : "com.jakewharton.timber:timber:$timberVersion",
+                rxAndroid              : 'io.reactivex.rxjava2:rxandroid:2.0.2',
+                rxJava                 : 'io.reactivex.rxjava2:rxjava:2.1.14',
+                rxAdapterRetrofit      : 'com.squareup.retrofit2:adapter-rxjava2:2.4.0',
+                roomRuntime            : "androidx.room:room-runtime:$roomVersion",
+                rxRoom                 : "androidx.room:room-rxjava2:$roomVersion",
+                roomCompiler           : "androidx.room:room-compiler:$roomVersion",
+                navigationFragment     : "androidx.navigation:navigation-fragment:$navigationVersion",
+                navigationUI           : "androidx.navigation:navigation-ui:$navigationVersion",
+                constraint_layout      : "androidx.constraintlayout:constraintlayout:$constraitLayoutVersion",
+                androidx_legacy_support: "androidx.legacy:legacy-support-v4:$androidXLegacySupport",
+                androidx_appcompat     : "androidx.appcompat:appcompat:$androidXLegacySupport",
+                android_material       : 'com.google.android.material:material:$materialVersion',
+                glide                  : "com.github.bumptech.glide:glide:$glideVersion",
+                pageIndicator          : 'com.tbuonomo.andrui:viewpagerdotsindicator:4.0'
+        ]
+
+
+        testDependencies = [junit                          : 'junit:junit:4.12',
+                            kotlinJUnit                    : "org.jetbrains.kotlin:kotlin-test-junit:${kotlinVersion}",
+                            fragmentNavComponent           : 'androidx.fragment:fragment:1.1.0-beta01',
+                            fragmentNavigationTestComponent: 'androidx.fragment:fragment-testing:1.1.0-beta01',
+                            mockito                        : 'org.mockito:mockito-core:3.0.0',
+                            kotlinMockk13                  : 'io.mockk:mockk:1.8.13.kotlin13',
+                            androidCoreTesting             : 'android.arch.core:core-testing:1.1.1'
+        ]
+
+        espressoVersion = "3.1.0"
+
+        androidTestDependencies = [androidJUnitRunner  : "androidx.test.ext:junit:1.1.0",
+                                   jUnitRules          : "androidx.test:rules:1.1.0",
+                                   androidKotlinMockk13: "io.mockk:mockk-android:1.8.13.kotlin13",
+                                   androidxJUnit       : "androidx.test.ext:junit:1.1.0",
+                                   espressoCore        : "androidx.test.espresso:espresso-core:$espressoVersion",
+                                   espressoContrib     : "androidx.test.espresso:espresso-contrib:$espressoVersion",
+                                   espressoIntents     : "androidx.test.espresso:espresso-intents:$espressoVersion",
+                                   androidCoreTesting  : 'android.arch.core:core-testing:1.1.1',
+                                   koinTest            : "org.koin:koin-test:$koinVersion"
+        ]
+    }
+}
