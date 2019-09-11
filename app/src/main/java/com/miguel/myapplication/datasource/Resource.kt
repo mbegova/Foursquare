@@ -16,6 +16,7 @@ enum class Status {
 }
 
 const val API_ERROR = 101
+const val UNHANDLE_ERROR_CODE = 111
 
 /**
  * A generic class that holds a value with its loading status.

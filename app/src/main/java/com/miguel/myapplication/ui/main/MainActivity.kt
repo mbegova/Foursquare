@@ -1,43 +1,43 @@
 package com.miguel.myapplication.ui.main
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import com.miguel.myapplication.R
-import com.miguel.myapplication.di.VenuesAPIFactory
-import com.miguel.myapplication.repository.VenuesRepository
-import com.miguel.myapplication.usecase.SearchVenuesUseCase
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
+import com.miguel.myapplication.viewmodel.VenuesViewModel
+import org.koin.android.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
 
-    val venuesApi = VenuesAPIFactory.retrofitVenues()
-    val venuesRepository = VenuesRepository(venuesApi)
-    val searchVenuesUseCase = SearchVenuesUseCase(venuesRepository)
+    private val venuesViewModel: VenuesViewModel by viewModel()
 
-    val compositeDisposable: CompositeDisposable = CompositeDisposable()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        //TODO code only for manual testing, delete it
-        compositeDisposable.add(searchVenuesUseCase.buildUseCase(Any()).subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread()).subscribe(
-            {
-                Log.i("TEST-I", "DATOS:${it}")
-            },
-            {
-                Log.i("TEST-I", "ERROR:$it")
-            }
-        ))
+        setVenuesLiveData()
 
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        compositeDisposable.clear()
+    override fun onResume() {
+        super.onResume()
+        venuesViewModel.searchVenue()
+    }
+
+    fun setVenuesLiveData() {
+        venuesViewModel.venueListLiveData.observe(this, Observer {
+
+            Log.i("TEST-I", "DATOS:${it}")
+        })
+
+
+        venuesViewModel.errorLiveData.observe(this, Observer {
+
+            Log.i("TEST-I", "ERROR:${it}")
+        })
+
     }
 
 }
