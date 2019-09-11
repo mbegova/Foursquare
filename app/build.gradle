@@ -21,7 +21,6 @@ android {
         }
     }
     configurations {
-        all*.exclude group: 'com.squareup.okio'
         all*.exclude group: 'com.google.guava', module: 'listenablefuture'
     }
 

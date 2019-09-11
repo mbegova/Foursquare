@@ -11,8 +11,8 @@ import java.util.concurrent.TimeUnit
 
 const val API_TIMEOUT: Long = 60
 const val BASE_API_URL = "https://api.foursquare.com/v2"
-const val API_VENUES_URL = "/venues"
-const val API_USERS_URL = "/users"
+const val API_VENUES_URL = "/venues/"
+const val API_USERS_URL = "/users/"
 
 object UserAPIFactory {
 
@@ -40,7 +40,7 @@ object UserAPIFactory {
         builder.addInterceptor(logInterceptor)
 
         return Retrofit.Builder()
-            .baseUrl(String.format(BASE_API_URL, API_USERS_URL))
+            .baseUrl(BASE_API_URL+API_USERS_URL)
             .client(builder.build())
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())
@@ -75,7 +75,7 @@ object VenuesAPIFactory {
         builder.addInterceptor(logInterceptor)
 
         return Retrofit.Builder()
-            .baseUrl(String.format(BASE_API_URL, API_VENUES_URL))
+            .baseUrl(BASE_API_URL+API_VENUES_URL)
             .client(builder.build())
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())
