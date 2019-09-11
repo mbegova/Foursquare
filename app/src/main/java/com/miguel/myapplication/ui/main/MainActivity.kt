@@ -1,7 +1,8 @@
-package com.miguel.myapplication
+package com.miguel.myapplication.ui.main
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.miguel.myapplication.R
 
 class MainActivity : AppCompatActivity() {
 
