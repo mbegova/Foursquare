@@ -24,6 +24,8 @@ val useCaseModule = module {
 
 val networkModule = module {
 
+    factory { VenuesAPIFactory.retrofitVenues() }
+    factory { UserAPIFactory.retrofitUser() }
 }
 
 
