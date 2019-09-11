@@ -2,6 +2,7 @@ package com.miguel.myapplication.ui.main
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import com.miguel.myapplication.R
 import com.miguel.myapplication.di.VenuesAPIFactory
 import io.reactivex.Single
@@ -21,8 +22,12 @@ class MainActivity : AppCompatActivity() {
         //TODO code only for manual testing, delete it
         compositeDisposable.add(venuesApi.searchVenues().subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread()).subscribe(
-            {},
-            {}
+            {
+                Log.i("TEST-I", "DATOS:${it.body()}")
+            },
+            {
+                Log.i("TEST-I", "ERROR:$it")
+            }
         ))
 
     }

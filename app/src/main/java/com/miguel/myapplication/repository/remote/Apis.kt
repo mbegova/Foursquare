@@ -1,5 +1,6 @@
 package com.miguel.myapplication.repository.remote
 
+import com.miguel.myapplication.datasource.remote.VenueDataResponse
 import io.reactivex.Single
 import retrofit2.Response
 import retrofit2.http.GET
@@ -27,5 +28,5 @@ interface ApiVenues{
         @Query("v") version: String=VERSION,
         @Query("near") near: String="London",
         @Query("query") name: String ="Costa Coffee"):
-            Single<Response<List<Any>>>
+            Single<Response<VenueDataResponse>>
 }
