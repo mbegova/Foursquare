@@ -1,6 +1,7 @@
 package com.miguel.myapplication.di
 
 import com.miguel.myapplication.repository.VenuesRepository
+import com.miguel.myapplication.usecase.SearchVenuesUseCase
 import org.koin.dsl.module
 
 
@@ -20,7 +21,7 @@ val repositoryModule = module {
 }
 
 val useCaseModule = module {
-
+    single { SearchVenuesUseCase(get()) }
 }
 
 val networkModule = module {
