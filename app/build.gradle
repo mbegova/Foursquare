@@ -83,4 +83,5 @@ dependencies {
     androidTestImplementation rootProject.ext.androidTestDependencies.espressoIntents
     androidTestImplementation rootProject.ext.androidTestDependencies.koinTest
     androidTestImplementation rootProject.ext.androidTestDependencies.androidCoreTesting
+    androidTestImplementation rootProject.ext.dependencies.android_material
 }

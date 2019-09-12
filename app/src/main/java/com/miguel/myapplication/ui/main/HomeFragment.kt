@@ -20,6 +20,13 @@ class HomeFragment : Fragment() {
 
     private val navigation by lazy { Navigation.findNavController(parent) }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        activity?.window?.setSoftInputMode(
+            WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -67,7 +74,7 @@ class HomeFragment : Fragment() {
 
     private fun requestFocus(view: View) {
         if (view.requestFocus()) {
-            activity?.getWindow()?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
+            activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
         }
     }
 
