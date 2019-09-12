@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Foursquare</string>
+    <string name="data_empty_message">No Data Available</string>
+    <string name="common_loading">Loading...</string>
+
+    <string name="state_error_close_title">Error</string>
+    <string name="state_error_close_text">A system error has occurred and the app will need to close</string>
+    <string name="button_close">Close</string>
 </resources>

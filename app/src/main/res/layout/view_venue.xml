@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+                                   xmlns:app="http://schemas.android.com/apk/res-auto"
+                                   xmlns:tools="http://schemas.android.com/tools"
+                                   android:layout_width="match_parent"
+                                   android:layout_height="wrap_content"
+                                   app:layout_constraintTop_toTopOf="parent"
+                                   android:layout_marginTop="2dp"
+                                   app:layout_constraintEnd_toEndOf="parent"
+                                   app:cardUseCompatPadding="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                                       xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                       android:layout_width="match_parent"
+                                                       android:layout_height="match_parent">
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="Venue Address"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:textSize="@dimen/text_size_large"
+                android:padding="@dimen/padding_small"
+                android:id="@+id/venue_address_tv"
+                android:textStyle="bold"/>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="Post code"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="@dimen/padding_medium"
+                android:id="@+id/venue_postcode_tv"
+                android:layout_marginTop="@dimen/padding_small"
+                app:layout_constraintTop_toBottomOf="@+id/venue_address_tv"
+                android:textStyle="italic"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>
