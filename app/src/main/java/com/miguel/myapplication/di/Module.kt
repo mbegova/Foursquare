@@ -3,6 +3,7 @@ package com.miguel.myapplication.di
 import com.miguel.myapplication.repository.VenuesRepository
 import com.miguel.myapplication.usecase.SearchVenuesUseCase
 import com.miguel.myapplication.viewmodel.VenuesViewModel
+import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 
@@ -11,7 +12,7 @@ val applicationModule = module {
 }
 
 val viewModelModule = module {
-    single{ VenuesViewModel(get()) }
+    viewModel{ VenuesViewModel(get()) }
 }
 
 val databaseModule = module {

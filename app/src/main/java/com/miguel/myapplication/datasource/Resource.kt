@@ -15,6 +15,7 @@ enum class Status {
     INIT
 }
 
+const val NO_ERROR = 10
 const val API_ERROR = 101
 const val UNHANDLE_ERROR_CODE = 111
 

@@ -12,6 +12,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.miguel.myapplication.R
+import com.miguel.myapplication.datasource.NO_ERROR
+import com.miguel.myapplication.datasource.Resource
 import com.miguel.myapplication.datasource.remote.Venue
 import com.miguel.myapplication.ui.adapters.VenuesAdapter
 import com.miguel.myapplication.viewmodel.VenuesViewModel
@@ -68,10 +70,11 @@ class SearchFragment : Fragment() {
         })
 
         venuesViewModel.errorLiveData.observe(this, Observer {
-
-            Log.i("TEST-I", "Error code:$it")
-            hideLoadingState()
-            showErrorPopup()
+            if (it!=NO_ERROR){
+                Log.i("TEST-I", "Error code:$it")
+                hideLoadingState()
+                showErrorPopup()
+            }
         })
 
     }

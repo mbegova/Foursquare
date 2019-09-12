@@ -1,6 +1,7 @@
 package com.miguel.myapplication.viewmodel
 
 import androidx.lifecycle.MutableLiveData
+import com.miguel.myapplication.datasource.NO_ERROR
 import com.miguel.myapplication.datasource.Status
 import com.miguel.myapplication.datasource.UNHANDLE_ERROR_CODE
 import com.miguel.myapplication.datasource.remote.Venue
@@ -16,8 +17,12 @@ import timber.log.Timber
     val venueListLiveData = MutableLiveData<List<Venue>>()
     val errorLiveData = MutableLiveData<Int>()
 
-     fun searchVenue(city:String, venue:String) {
+     init {
+         venueListLiveData.value = emptyList()
+         errorLiveData.value = NO_ERROR
+     }
 
+     fun searchVenue(city:String, venue:String) {
          val searchVenueDataIn = SearchVenuesUseCase.SearchVenueDataIn(city, venue)
         compositeDisposable.add(
             searchVenuesUseCase.run(searchVenueDataIn).subscribe({ venueResponse ->
