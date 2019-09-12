@@ -8,6 +8,7 @@ import com.miguel.myapplication.datasource.remote.VenueDataResponse
 import com.miguel.myapplication.repository.remote.ApiVenues
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
 import io.reactivex.Single
 import okhttp3.MediaType
 import okhttp3.ResponseBody
@@ -39,14 +40,18 @@ class VenuesRepositoryTest {
     @Test
     fun test_searchVenues_success() {
 
+        val city = "city"
+        val venue = "venue"
         val venueDataResponse: VenueDataResponse = mockk(relaxed = true)
         val response = Response.success(venueDataResponse)
         val responseObservable = Single.just(response)
         val resource = Resource.success(venueDataResponse)
 
-        every { venuesApi.searchVenues() } returns responseObservable
+        every { venuesApi.searchVenues(near = city, name=venue) } returns responseObservable
 
-        val single = venuesRepository.searchVenues()
+        val single = venuesRepository.searchVenues(city, venue)
+
+        verify(exactly = 1) { venuesApi.searchVenues(near = city, name=venue) }
 
         val singleTest = single.test()
         singleTest.assertComplete()
@@ -58,12 +63,17 @@ class VenuesRepositoryTest {
     @Test
     fun test_searchVenues_exception() {
 
+        val city = "city"
+        val venue = "venue"
+
         val exception = TestException()
         val responseObservable = Single.error<Response<VenueDataResponse>>(exception)
 
-        every { venuesApi.searchVenues() } returns responseObservable
+        every { venuesApi.searchVenues(near = city, name=venue) } returns responseObservable
 
-        val single = venuesRepository.searchVenues()
+        val single = venuesRepository.searchVenues(city, venue)
+
+        verify(exactly = 1) { venuesApi.searchVenues(near = city, name=venue) }
 
         val singleTest = single.test()
         singleTest.assertNotComplete()
@@ -73,15 +83,20 @@ class VenuesRepositoryTest {
     @Test
     fun test_searchVenues_error() {
 
+        val city = "city"
+        val venue = "venue"
         val response =
             Response.error<VenueDataResponse>(HttpURLConnection.HTTP_GATEWAY_TIMEOUT, fakeErrorResponseBody)
 
         val responseObservable = Single.just(response)
         val resource = Resource.error<VenueDataResponse>(API_ERROR)
 
-        every { venuesApi.searchVenues() } returns responseObservable
 
-        val single = venuesRepository.searchVenues()
+        every { venuesApi.searchVenues(near = city, name=venue) } returns responseObservable
+
+        val single = venuesRepository.searchVenues(city, venue)
+
+        verify(exactly = 1) { venuesApi.searchVenues(near = city, name=venue) }
 
         val singleTest = single.test()
         singleTest.assertComplete()

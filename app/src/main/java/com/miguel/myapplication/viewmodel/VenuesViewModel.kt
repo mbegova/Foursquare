@@ -16,9 +16,11 @@ import timber.log.Timber
     val venueListLiveData = MutableLiveData<List<Venue>>()
     val errorLiveData = MutableLiveData<Int>()
 
-     fun searchVenue() {
+     fun searchVenue(city:String, venue:String) {
+
+         val searchVenueDataIn = SearchVenuesUseCase.SearchVenueDataIn(city, venue)
         compositeDisposable.add(
-            searchVenuesUseCase.run(Any()).subscribe({ venueResponse ->
+            searchVenuesUseCase.run(searchVenueDataIn).subscribe({ venueResponse ->
                 if (venueResponse.status != Status.ERROR) {
                     venueResponse.data?.response?.venues?.let { venuesList ->
                         venueListLiveData.value = venuesList

@@ -37,6 +37,10 @@ class VenuesViewModelTests {
 
     @Test
     fun searchVenue_success() {
+
+        val city = "city"
+        val venue = "venue"
+        val searchVenueDataIn = SearchVenuesUseCase.SearchVenueDataIn(city, venue)
         val meta: Meta = mockk(relaxed = true)
         val geocode: Geocode = mockk(relaxed = true)
         val venue1: Venue = mockk(relaxed = true)
@@ -48,9 +52,12 @@ class VenuesViewModelTests {
         val venueDataResponseResource = Resource.success(venueDataResponse)
         val single = Single.just<Resource<VenueDataResponse?>>(venueDataResponseResource)
 
-        every { searchVenuesUseCase.run(any()) } returns single
+        every { searchVenuesUseCase.run(searchVenueDataIn) } returns single
 
-        venuesViewModel.searchVenue()
+        venuesViewModel.searchVenue(city, venue)
+
+        verify(exactly = 1) {searchVenuesUseCase.run(searchVenueDataIn)  }
+
         val testSingle = single.test()
         testSingle.assertComplete()
         testSingle.assertNoErrors()
@@ -62,12 +69,18 @@ class VenuesViewModelTests {
 
     @Test
     fun searchVenue_no_data() {
+
+        val city = "city"
+        val venue = "venue"
+        val searchVenueDataIn = SearchVenuesUseCase.SearchVenueDataIn(city, venue)
         val venueDataResponseResource = Resource.success(null)
         val single = Single.just<Resource<VenueDataResponse?>>(venueDataResponseResource)
 
-        every { searchVenuesUseCase.run(any()) } returns single
+        every { searchVenuesUseCase.run(searchVenueDataIn) } returns single
 
-        venuesViewModel.searchVenue()
+        venuesViewModel.searchVenue(city, venue)
+
+        verify(exactly = 1) {searchVenuesUseCase.run(searchVenueDataIn)  }
         val testSingle = single.test()
         testSingle.assertComplete()
         testSingle.assertNoErrors()
@@ -80,12 +93,18 @@ class VenuesViewModelTests {
     @Test
     fun searchVenue_error() {
 
+        val city = "city"
+        val venue = "venue"
+        val searchVenueDataIn = SearchVenuesUseCase.SearchVenueDataIn(city, venue)
+
         val venueDataResponseResource = Resource.error<VenueDataResponse?>(API_ERROR)
         val single = Single.just<Resource<VenueDataResponse?>>(venueDataResponseResource)
 
-        every { searchVenuesUseCase.run(any()) } returns single
+        every { searchVenuesUseCase.run(searchVenueDataIn) } returns single
 
-        venuesViewModel.searchVenue()
+        venuesViewModel.searchVenue(city, venue)
+
+        verify(exactly = 1) {searchVenuesUseCase.run(searchVenueDataIn)  }
         val testSingle = single.test()
         testSingle.assertComplete()
         testSingle.assertNoErrors()
@@ -98,12 +117,18 @@ class VenuesViewModelTests {
     @Test
     fun searchVenue_exception() {
 
+        val city = "city"
+        val venue = "venue"
+        val searchVenueDataIn = SearchVenuesUseCase.SearchVenueDataIn(city, venue)
+
         val exception = TestException()
         val single = Single.error<Resource<VenueDataResponse?>>(exception)
 
-        every { searchVenuesUseCase.run(any()) } returns single
+        every { searchVenuesUseCase.run(searchVenueDataIn) } returns single
 
-        venuesViewModel.searchVenue()
+        venuesViewModel.searchVenue(city, venue)
+
+        verify(exactly = 1) {searchVenuesUseCase.run(searchVenueDataIn)  }
 
         val testSingle = single.test()
         testSingle.assertNotComplete()

@@ -9,14 +9,14 @@ import io.reactivex.Single
 
 interface IVenueRepository{
 
-    fun searchVenues(): Single<Resource<VenueDataResponse?>>
+    fun searchVenues(city: String, venue: String): Single<Resource<VenueDataResponse?>>
 
 }
 
 class VenuesRepository(val venuesApi: ApiVenues):IVenueRepository{
 
-    override fun searchVenues(): Single<Resource<VenueDataResponse?>> {
-        return venuesApi.searchVenues().map {response->
+    override fun searchVenues(city: String, venue: String): Single<Resource<VenueDataResponse?>> {
+        return venuesApi.searchVenues(near = city, name = venue).map {response->
             if(response.isSuccessful){
                 Resource.success(response.body())
             } else {

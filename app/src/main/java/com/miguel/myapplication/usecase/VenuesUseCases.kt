@@ -7,10 +7,17 @@ import com.miguel.myapplication.repository.VenuesRepository
 import io.reactivex.Single
 
 class SearchVenuesUseCase(private val venuesRepository: VenuesRepository) :
-    InteractorSingle<Any, Resource<VenueDataResponse?>>() {
-    override fun buildUseCase(params: Any): Single<Resource<VenueDataResponse?>> {
-        return venuesRepository.searchVenues()
-    }
+    InteractorSingle<SearchVenuesUseCase.SearchVenueDataIn, Resource<VenueDataResponse?>>() {
+    override fun buildUseCase(params: SearchVenueDataIn): Single<Resource<VenueDataResponse?>>  =
+         params.run {
+             venuesRepository.searchVenues(city, venue)
+         }
+
+
+    data class SearchVenueDataIn(
+        val city: String,
+        val venue: String
+    )
 }
 
 //TODO Create in this file rest of venues use cases

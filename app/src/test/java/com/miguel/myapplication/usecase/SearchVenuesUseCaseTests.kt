@@ -24,7 +24,10 @@ class SearchVenuesUseCaseTests {
 
     @Test
     fun run_success() {
-        searchVenuesUseCase.run(Any())
-        verify(exactly = 1) { venuesRepository.searchVenues() }
+        val city = "city"
+        val venue = "venue"
+        val searchVenueDataIn = SearchVenuesUseCase.SearchVenueDataIn(city, venue)
+        searchVenuesUseCase.run(searchVenueDataIn)
+        verify(exactly = 1) { venuesRepository.searchVenues(city, venue) }
     }
 }
