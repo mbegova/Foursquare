@@ -20,6 +20,7 @@ val databaseModule = module {
 }
 val repositoryModule = module {
     single { VenuesRepository(get()) }
+    single { DatabaseFactory.getDBInstance(get()) }
 }
 
 val useCaseModule = module {
@@ -27,7 +28,6 @@ val useCaseModule = module {
 }
 
 val networkModule = module {
-
     factory { VenuesAPIFactory.retrofitVenues() }
     factory { UserAPIFactory.retrofitUser() }
 }
