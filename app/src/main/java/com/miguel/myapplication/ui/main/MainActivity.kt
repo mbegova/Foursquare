@@ -21,6 +21,7 @@ import com.miguel.myapplication.viewmodel.VenuesViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.android.viewmodel.ext.android.viewModel
 
+//TODO: Create espresso tests
 class MainActivity : AppCompatActivity() {
 
     private val venuesViewModel: VenuesViewModel by viewModel()
