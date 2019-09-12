@@ -19,7 +19,7 @@ val databaseModule = module {
 
 }
 val repositoryModule = module {
-    single { VenuesRepository(get()) }
+    single { VenuesRepository(get(), get()) }
     single { DatabaseFactory.getDBInstance(get()) }
 }
 

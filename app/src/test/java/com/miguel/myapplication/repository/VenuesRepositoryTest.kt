@@ -4,7 +4,10 @@ import com.bridgeinternationalacademies.letsmark.utils.RxSchedulerRule
 import com.bridgeinternationalacademies.letsmark.utils.TestException
 import com.miguel.myapplication.datasource.API_ERROR
 import com.miguel.myapplication.datasource.Resource
-import com.miguel.myapplication.datasource.remote.VenueDataResponse
+import com.miguel.myapplication.datasource.local.FoursquareDatabase
+import com.miguel.myapplication.datasource.local.VenueDao
+import com.miguel.myapplication.datasource.local.entities.VenueData
+import com.miguel.myapplication.datasource.remote.*
 import com.miguel.myapplication.repository.remote.ApiVenues
 import io.mockk.every
 import io.mockk.mockk
@@ -21,6 +24,7 @@ import java.net.HttpURLConnection
 class VenuesRepositoryTest {
 
     private lateinit var venuesRepository: VenuesRepository
+    private lateinit var  database: FoursquareDatabase
     private lateinit var venuesApi: ApiVenues
 
     val fakeErrorResponseBody: ResponseBody = ResponseBody.create(MediaType.parse(""), "")
@@ -33,7 +37,8 @@ class VenuesRepositoryTest {
     fun setup() {
 
         venuesApi = mockk(relaxed = true)
-        venuesRepository = VenuesRepository(venuesApi)
+        database = mockk(relaxed = true)
+        venuesRepository = VenuesRepository(venuesApi, database)
 
     }
 
@@ -42,12 +47,23 @@ class VenuesRepositoryTest {
 
         val city = "city"
         val venue = "venue"
-        val venueDataResponse: VenueDataResponse = mockk(relaxed = true)
+        val address = "address"
+        val postCode = "postCode"
+        val meta: Meta = mockk(relaxed = true)
+        val geocode: Geocode = mockk(relaxed = true)
+        val location = Location(address=address, postalCode=postCode)
+        val venue1= Venue(location=location)
+        val venueList = listOf(venue1)
+        val remoteResponse = com.miguel.myapplication.datasource.remote.Response(venueList, geocode)
+        val venueDataResponse = VenueDataResponse(meta, remoteResponse)
         val response = Response.success(venueDataResponse)
         val responseObservable = Single.just(response)
         val resource = Resource.success(venueDataResponse)
+        val venuesDao: VenueDao = mockk(relaxed = true)
+        val venueData = VenueData(address=address, postCode=postCode)
 
         every { venuesApi.searchVenues(near = city, name=venue) } returns responseObservable
+        every { database.venueDao() } returns venuesDao
 
         val single = venuesRepository.searchVenues(city, venue)
 
@@ -57,6 +73,8 @@ class VenuesRepositoryTest {
         singleTest.assertComplete()
         singleTest.assertNoErrors()
         singleTest.assertValue(resource)
+
+        verify(exactly = 1) { venuesDao.insertVenue(venueData) }
 
     }
 
@@ -68,8 +86,10 @@ class VenuesRepositoryTest {
 
         val exception = TestException()
         val responseObservable = Single.error<Response<VenueDataResponse>>(exception)
+        val venuesDao: VenueDao = mockk(relaxed = true)
 
         every { venuesApi.searchVenues(near = city, name=venue) } returns responseObservable
+        every { database.venueDao() } returns venuesDao
 
         val single = venuesRepository.searchVenues(city, venue)
 
@@ -78,6 +98,7 @@ class VenuesRepositoryTest {
         val singleTest = single.test()
         singleTest.assertNotComplete()
         singleTest.assertError(exception)
+        verify(exactly = 0) { venuesDao.insertVenue(any()) }
     }
 
     @Test
@@ -90,9 +111,11 @@ class VenuesRepositoryTest {
 
         val responseObservable = Single.just(response)
         val resource = Resource.error<VenueDataResponse>(API_ERROR)
+        val venuesDao: VenueDao = mockk(relaxed = true)
 
 
         every { venuesApi.searchVenues(near = city, name=venue) } returns responseObservable
+        every { database.venueDao() } returns venuesDao
 
         val single = venuesRepository.searchVenues(city, venue)
 
@@ -102,6 +125,7 @@ class VenuesRepositoryTest {
         singleTest.assertComplete()
         singleTest.assertNoErrors()
         singleTest.assertValue(resource)
+        verify(exactly = 0) { venuesDao.insertVenue(any()) }
 
     }
 
