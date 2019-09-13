@@ -26,6 +26,7 @@
 - Search screen where will show resutl of the search
 - Latest search screen
 - 99% Unit test coverage
+- 50% Automated(Espresso) test coverage
 
 # Improvements
 - 99% Automated(Espresso) test coverage
