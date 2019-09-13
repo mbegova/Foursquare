@@ -168,4 +168,25 @@ class VenuesViewModelTests {
         Assert.assertEquals(venueList.map { it.mapToVenueUI() }, venuesViewModel.venueListLiveData.value)
     }
 
+
+
+    @Test
+    fun lastQuery_exception() {
+
+        val exception = TestException()
+        val single = Single.error<List<VenueData>>(exception)
+        every { lastQueryUseCase.run(any()) } returns single
+
+        venuesViewModel.lastQuery()
+
+        verify(exactly = 1) {lastQueryUseCase.run(any())  }
+
+        val testSingle = single.test()
+        testSingle.assertNotComplete()
+        testSingle.assertError(exception)
+
+        Assert.assertEquals(UNHANDLE_ERROR_CODE, venuesViewModel.errorLiveData.value)
+
+    }
+
 }
