@@ -9,6 +9,9 @@ import androidx.room.PrimaryKey
 data class VenueData(
     @PrimaryKey(autoGenerate = true)
     var venueId: Long=0,
+    val name: String?="",
     val address: String? = "",
     val postCode: String? = ""
-)
+){
+    fun mapToVenueUI() = com.miguel.myapplication.datasource.ui.Venue(name, address, postCode)
+}

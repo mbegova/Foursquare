@@ -43,6 +43,38 @@ class VenuesRepositoryTest {
     }
 
     @Test
+    fun test_lastQueryVenues_call(){
+
+        val venuesDao: VenueDao = mockk(relaxed = true)
+        every { database.venueDao() } returns venuesDao
+
+        venuesRepository.lastQueryVenues()
+
+        verify(exactly = 1) { venuesDao.getVenues() }
+
+    }
+
+   /* @Test
+    fun test_lastQueryVenues_success(){
+        val venue1: VenueData = mockk(relaxed = true)
+        val venue2: VenueData = mockk(relaxed = true)
+        val venueList = listOf(venue1, venue2)
+
+        val single = Single.just<List<VenueData>>(venueList)
+
+        val venuesDao: VenueDao = mockk(relaxed = true)
+        every { database.venueDao() } returns venuesDao
+
+        every { venuesDao.getVenues() } returns
+
+        venuesRepository.lastQueryVenues()
+
+        verify(exactly = 1) { venuesDao.getVenues() }
+
+    }
+    */
+
+    @Test
     fun test_searchVenues_success() {
 
         val city = "city"
@@ -52,7 +84,8 @@ class VenuesRepositoryTest {
         val meta: Meta = mockk(relaxed = true)
         val geocode: Geocode = mockk(relaxed = true)
         val location = Location(address=address, postalCode=postCode)
-        val venue1= Venue(location=location)
+
+        val venue1= Venue(name = venue, location=location)
         val venueList = listOf(venue1)
         val remoteResponse = com.miguel.myapplication.datasource.remote.Response(venueList, geocode)
         val venueDataResponse = VenueDataResponse(meta, remoteResponse)
@@ -60,7 +93,7 @@ class VenuesRepositoryTest {
         val responseObservable = Single.just(response)
         val resource = Resource.success(venueDataResponse)
         val venuesDao: VenueDao = mockk(relaxed = true)
-        val venueData = VenueData(address=address, postCode=postCode)
+        val venueData = VenueData(name = venue, address=address, postCode=postCode)
 
         every { venuesApi.searchVenues(near = city, name=venue) } returns responseObservable
         every { database.venueDao() } returns venuesDao

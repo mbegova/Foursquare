@@ -50,4 +50,20 @@
             android:layout_marginBottom="32dp"
             app:layout_constraintBottom_toBottomOf="parent" android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"/>
+    <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_last_query"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Last Query"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:padding="8dp"
+            android:textAlignment="center"
+            android:textColor="@android:color/white"
+            app:cornerRadius="8dp"
+            app:rippleColor="@color/colorPrimary"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp" app:layout_constraintHorizontal_bias="1.0"
+            android:layout_marginBottom="8dp" app:layout_constraintBottom_toTopOf="@+id/btn_search"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -5,7 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.miguel.myapplication.R
-import com.miguel.myapplication.datasource.remote.Venue
+import com.miguel.myapplication.datasource.ui.Venue
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_empty.view.*
 import kotlinx.android.synthetic.main.view_title.view.*
@@ -22,8 +22,8 @@ class VenuesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     var title: String = "Venue"
 
     var venuesList: List<Venue> = mutableListOf()
-        set(teachers) {
-            field = teachers
+        set(venue) {
+            field = venue
             notifyDataSetChanged()
         }
 
@@ -78,8 +78,8 @@ class VenuesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             get() = itemView
 
         fun bind(item: Venue) {
-            itemView.venue_address_tv.text = item.location?.address
-            itemView.venue_postcode_tv.text = item.location?.postalCode
+            itemView.venue_address_tv.text = item.name
+            itemView.venue_extra_info_tv.text = "${item.address?:""} - ${item.postalCode?:""}"
             itemView.setOnClickListener {
                 selectedVenueListener.invoke("item:$item")
             }

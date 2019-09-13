@@ -20,14 +20,12 @@ import kotlinx.android.synthetic.main.fragment_search.view.*
 import org.koin.android.viewmodel.ext.android.viewModel
 import otherwise
 
-const val ARG_CITY = "arg_city"
-const val ARG_VENUE = "arg_venue"
-
-class SearchFragment : Fragment() {
+//TODO: THIS IS A COPY OF SEARCH FRAGMENT - IT SHOULD BE HANDLE BOTH STATES IN SAME FRAGMENT
+//FRAGMENT TO PROVE NAVIGATION WITH 2 ACTIONS
+class LastQueryFragment : Fragment() {
 
     private val venuesViewModel: VenuesViewModel by viewModel()
     private lateinit var venuesAdapter: VenuesAdapter
-    private lateinit var city: String
     private lateinit var venue: String
 
     var loadingDialog: AlertDialog? = null
@@ -42,11 +40,11 @@ class SearchFragment : Fragment() {
 
         getBundleData()
 
-        if (::city.isInitialized && ::venue.isInitialized) {
+        if (::venue.isInitialized) {
             initAdapter(venue, view)
             setVenuesLiveData()
             showLoadingState()
-            venuesViewModel.searchVenue(city, venue)
+            venuesViewModel.lastQuery()
         } else {
             showErrorPopup()
         }
@@ -56,7 +54,6 @@ class SearchFragment : Fragment() {
 
     private fun getBundleData() {
         arguments?.let {
-            city = it.getString(ARG_CITY, "")
             venue = it.getString(ARG_VENUE, "")
         }.otherwise {
             showErrorPopup()
@@ -66,7 +63,6 @@ class SearchFragment : Fragment() {
     fun setVenuesLiveData() {
         venuesViewModel.venueListLiveData.observe(this, Observer { venueList ->
             refreshVenues(venueList)
-
         })
 
         venuesViewModel.errorLiveData.observe(this, Observer {

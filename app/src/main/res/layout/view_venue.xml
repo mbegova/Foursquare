@@ -29,7 +29,7 @@
                 tools:text="Post code"
                 app:layout_constraintStart_toStartOf="parent"
                 android:layout_marginStart="@dimen/padding_medium"
-                android:id="@+id/venue_postcode_tv"
+                android:id="@+id/venue_extra_info_tv"
                 android:layout_marginTop="@dimen/padding_small"
                 app:layout_constraintTop_toBottomOf="@+id/venue_address_tv"
                 android:textStyle="italic"/>

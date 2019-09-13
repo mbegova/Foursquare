@@ -13,11 +13,16 @@ interface IVenueRepository{
 
     fun searchVenues(city: String, venue: String): Single<Resource<VenueDataResponse?>>
 
+    fun lastQueryVenues(): Single<List<VenueData>>
+
 }
 
 class VenuesRepository(
     val venuesApi: ApiVenues,
     val database:FoursquareDatabase):IVenueRepository{
+
+    override fun lastQueryVenues(): Single<List<VenueData>> =
+        database.venueDao().getVenues()
 
     override fun searchVenues(city: String, venue: String): Single<Resource<VenueDataResponse?>> {
         return venuesApi.searchVenues(near = city, name = venue).doOnSuccess {resource->
@@ -26,8 +31,8 @@ class VenuesRepository(
                 venuesDao.deleteAll()
                 val venues = resource.body()?.response?.venues
                 venues?.forEach {venue->
-                    venue.location?.run{
-                        val venueData = VenueData(address = address, postCode = postalCode)
+                    venue.run{
+                        val venueData = mapToVenueDB()
                         venuesDao.insertVenue(venueData)
                     }
                 }
