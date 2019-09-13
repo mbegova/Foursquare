@@ -21,7 +21,7 @@ import org.koin.android.viewmodel.ext.android.viewModel
 import otherwise
 
 //TODO: THIS IS A COPY OF SEARCH FRAGMENT - IT SHOULD BE HANDLE BOTH STATES IN SAME FRAGMENT
-//FRAGMENT TO PROVE NAVIGATION WITH 2 ACTIONS
+//FRAGMENT TO SHOW NAVIGATION WITH 2 ACTIONS
 class LastQueryFragment : Fragment() {
 
     private val venuesViewModel: VenuesViewModel by viewModel()

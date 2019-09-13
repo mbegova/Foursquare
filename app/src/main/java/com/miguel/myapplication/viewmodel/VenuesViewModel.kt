@@ -66,9 +66,9 @@ import timber.log.Timber
                  it.stackTrace
                  emptyList()
              }
-             if (venuesList.isNotEmpty()) {
-                 venueListLiveData.value = venuesList.map { venue -> venue.mapToVenueUI() }
-             }
+
+             venueListLiveData.value = venuesList.map { venue -> venue.mapToVenueUI() }
+
          }
      }
 }
