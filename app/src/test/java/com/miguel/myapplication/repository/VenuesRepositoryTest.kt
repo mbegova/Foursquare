@@ -1,7 +1,9 @@
 package com.miguel.myapplication.repository
 
+import androidx.room.withTransaction
 import com.bridgeinternationalacademies.letsmark.utils.RxSchedulerRule
 import com.bridgeinternationalacademies.letsmark.utils.TestException
+import com.miguel.myapplication.R
 import com.miguel.myapplication.datasource.API_ERROR
 import com.miguel.myapplication.datasource.Resource
 import com.miguel.myapplication.datasource.local.FoursquareDatabase
@@ -9,10 +11,9 @@ import com.miguel.myapplication.datasource.local.VenueDao
 import com.miguel.myapplication.datasource.local.entities.VenueData
 import com.miguel.myapplication.datasource.remote.*
 import com.miguel.myapplication.repository.remote.ApiVenues
-import io.mockk.every
-import io.mockk.mockk
-import io.mockk.verify
+import io.mockk.*
 import io.reactivex.Single
+import kotlinx.coroutines.runBlocking
 import okhttp3.MediaType
 import okhttp3.ResponseBody
 import org.junit.Before
@@ -40,6 +41,17 @@ class VenuesRepositoryTest {
         database = mockk(relaxed = true)
         venuesRepository = VenuesRepository(venuesApi, database)
 
+        MockKAnnotations.init(this)
+
+        mockkStatic(
+            "androidx.room.RoomDatabaseKt"
+        )
+
+        val transactionLambda = slot<suspend () -> R>()
+        coEvery { database.withTransaction(capture(transactionLambda)) } coAnswers {
+            transactionLambda.captured.invoke()
+        }
+
     }
 
     @Test
@@ -54,25 +66,22 @@ class VenuesRepositoryTest {
 
     }
 
-   /* @Test
-    fun test_lastQueryVenues_success(){
-        val venue1: VenueData = mockk(relaxed = true)
-        val venue2: VenueData = mockk(relaxed = true)
-        val venueList = listOf(venue1, venue2)
+    @Test
+    fun test_lastQueryVenues_ok(){
 
-        val single = Single.just<List<VenueData>>(venueList)
+        val list: List<VenueData> = mockk(relaxed = true)
 
         val venuesDao: VenueDao = mockk(relaxed = true)
         every { database.venueDao() } returns venuesDao
 
-        every { venuesDao.getVenues() } returns
+        coEvery { venuesDao.getVenuesCoroutines() } returns list
+        runBlocking {
+            venuesRepository.lastQueryVenuesCoroutines()
 
-        venuesRepository.lastQueryVenues()
-
-        verify(exactly = 1) { venuesDao.getVenues() }
+            coVerify(exactly = 1) { venuesDao.getVenuesCoroutines() }
+        }
 
     }
-    */
 
     @Test
     fun test_searchVenues_success() {

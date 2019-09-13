@@ -60,10 +60,15 @@ dependencies {
     implementation rootProject.ext.dependencies.rxRoom
     implementation rootProject.ext.dependencies.roomCompiler
     implementation rootProject.ext.dependencies.pageIndicator
+    implementation rootProject.ext.dependencies.roomCoroutines
+    implementation rootProject.ext.dependencies.kotlinCoroutines
+    implementation rootProject.ext.dependencies.arrowCoreData
+    implementation rootProject.ext.dependencies.arrowSyntax
 
     annotationProcessor rootProject.ext.dependencies.roomCompiler
 
     kapt rootProject.ext.dependencies.roomCompiler
+    kapt rootProject.ext.dependencies.arrowMeta
     implementation rootProject.ext.dependencies.glide
 
     //Navigation component

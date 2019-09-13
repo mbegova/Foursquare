@@ -19,4 +19,8 @@ interface VenueDao {
 
     @Query("SELECT * FROM VenueData")
     fun getVenues(): Single<List<VenueData>>
+
+    @Query("SELECT * FROM VenueData")
+    suspend fun getVenuesCoroutines(): List<VenueData>
+
 }
