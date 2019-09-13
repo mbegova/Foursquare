@@ -25,6 +25,7 @@
 - Main screen where we can search for some venues
 - Search screen where will show resutl of the search
 - Latest search screen
+- 99% Unit test coverage
 
 # Improvements
 - 99% Automated(Espresso) test coverage
