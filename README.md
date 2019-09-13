@@ -13,6 +13,8 @@
   - Architectural components (Livedata, viewmodel, Room, Navigation)
   - Retrofit
   - Rxjava
+  - Coroutines
+  - Arrow
   - Espresso
   - Mockk
   - Trunk based development
@@ -22,13 +24,10 @@
 # Functionality developed
 - Main screen where we can search for some venues
 - Search screen where will show resutl of the search
-
-# Functionlity planned
 - Latest search screen
 
 # Improvements
-- Add coroutines to the project
-- Full Automated test coverage
+- 99% Automated(Espresso) test coverage
 
 License
 ----
