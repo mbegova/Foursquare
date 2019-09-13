@@ -28,6 +28,11 @@ android {
         pickFirst 'META-INF/*'
         pickFirst 'mockito-extensions/org.mockito.plugins.MockMaker'
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {

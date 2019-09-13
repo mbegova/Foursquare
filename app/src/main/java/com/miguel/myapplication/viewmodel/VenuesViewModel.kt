@@ -1,10 +1,13 @@
 package com.miguel.myapplication.viewmodel
 
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
+import arrow.core.getOrHandle
 import com.miguel.myapplication.datasource.NO_ERROR
 import com.miguel.myapplication.datasource.Status
 import com.miguel.myapplication.datasource.UNHANDLE_ERROR_CODE
 import com.miguel.myapplication.datasource.ui.Venue
+import com.miguel.myapplication.usecase.LastQueryCoroutineUseCase
 import com.miguel.myapplication.usecase.LastQueryUseCase
 import com.miguel.myapplication.usecase.SearchVenuesUseCase
 import otherwise
@@ -13,7 +16,8 @@ import timber.log.Timber
 
  class VenuesViewModel(
     private val searchVenuesUseCase: SearchVenuesUseCase,
-    private val lastQueryUseCase: LastQueryUseCase
+    private val lastQueryUseCase: LastQueryUseCase,
+    private val lastQueryCoroutineUseCase: LastQueryCoroutineUseCase
 ) : RxViewModel() {
 
     val venueListLiveData = MutableLiveData<List<Venue>>()
@@ -53,5 +57,18 @@ import timber.log.Timber
                  }
              )
          )
+     }
+
+     fun lastQueryCoroutines() {
+         lastQueryCoroutineUseCase.invoke(viewModelScope, Any()) { result ->
+             val venuesList = result.getOrHandle {
+                 errorLiveData.value = UNHANDLE_ERROR_CODE
+                 it.stackTrace
+                 emptyList()
+             }
+             if (venuesList.isNotEmpty()) {
+                 venueListLiveData.value = venuesList.map { venue -> venue.mapToVenueUI() }
+             }
+         }
      }
 }

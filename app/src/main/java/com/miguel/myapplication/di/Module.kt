@@ -1,6 +1,8 @@
 package com.miguel.myapplication.di
 
+import com.miguel.myapplication.repository.IVenueRepository
 import com.miguel.myapplication.repository.VenuesRepository
+import com.miguel.myapplication.usecase.LastQueryCoroutineUseCase
 import com.miguel.myapplication.usecase.LastQueryUseCase
 import com.miguel.myapplication.usecase.SearchVenuesUseCase
 import com.miguel.myapplication.viewmodel.VenuesViewModel
@@ -13,20 +15,21 @@ val applicationModule = module {
 }
 
 val viewModelModule = module {
-    viewModel{ VenuesViewModel(get(), get()) }
+    viewModel{ VenuesViewModel(get(), get(), get()) }
 }
 
 val databaseModule = module {
 
 }
 val repositoryModule = module {
-    single { VenuesRepository(get(), get()) }
+    single<IVenueRepository> { VenuesRepository(get(), get()) }
     single { DatabaseFactory.getDBInstance(get()) }
 }
 
 val useCaseModule = module {
     single { SearchVenuesUseCase(get())}
     single { LastQueryUseCase(get()) }
+    single { LastQueryCoroutineUseCase(get()) }
 }
 
 val networkModule = module {

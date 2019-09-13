@@ -1,6 +1,8 @@
 package com.miguel.myapplication.viewmodel
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.lifecycle.viewModelScope
+import arrow.core.Either
 import com.bridgeinternationalacademies.letsmark.utils.RxSchedulerRule
 import com.bridgeinternationalacademies.letsmark.utils.TestException
 import com.miguel.myapplication.datasource.API_ERROR
@@ -8,12 +10,15 @@ import com.miguel.myapplication.datasource.Resource
 import com.miguel.myapplication.datasource.UNHANDLE_ERROR_CODE
 import com.miguel.myapplication.datasource.local.entities.VenueData
 import com.miguel.myapplication.datasource.remote.*
+import com.miguel.myapplication.usecase.LastQueryCoroutineUseCase
 import com.miguel.myapplication.usecase.LastQueryUseCase
 import com.miguel.myapplication.usecase.SearchVenuesUseCase
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import io.reactivex.Single
+import kotlinx.coroutines.launch
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
@@ -23,6 +28,7 @@ import org.junit.rules.TestRule
 class VenuesViewModelTests {
     lateinit var searchVenuesUseCase: SearchVenuesUseCase
     lateinit var lastQueryUseCase: LastQueryUseCase
+    lateinit var lastQueryCoroutineUseCase: LastQueryCoroutineUseCase
     private lateinit var venuesViewModel: VenuesViewModel
 
     @get:Rule
@@ -36,7 +42,8 @@ class VenuesViewModelTests {
     fun setup() {
         searchVenuesUseCase = mockk(relaxed = true)
         lastQueryUseCase = mockk(relaxed = true)
-        venuesViewModel = VenuesViewModel(searchVenuesUseCase, lastQueryUseCase)
+        lastQueryCoroutineUseCase = mockk(relaxed = true)
+        venuesViewModel = VenuesViewModel(searchVenuesUseCase, lastQueryUseCase, lastQueryCoroutineUseCase)
     }
 
     @Test
@@ -187,6 +194,39 @@ class VenuesViewModelTests {
 
         Assert.assertEquals(UNHANDLE_ERROR_CODE, venuesViewModel.errorLiveData.value)
 
+    }
+
+    @Test
+    fun lastQueryCoroutines_success() {
+        val venueId1 = 1L
+        val name1 ="name1"
+        val address1="address1"
+        val postCode1= "postCode1"
+        val venueId2 = 2L
+        val name2 ="name2"
+        val address2="address2"
+        val postCode2= "postCode2"
+        val venue1=  VenueData(venueId1, name1, address1, postCode1)
+        val venue2=  VenueData(venueId2, name2, address2, postCode2)
+        val venueList = listOf(venue1, venue2)
+
+        coEvery { lastQueryCoroutineUseCase.run(any()) } returns Either.right(venueList)
+        venuesViewModel.viewModelScope.launch {
+            venuesViewModel.lastQueryCoroutines()
+            verify(exactly = 1) {  lastQueryCoroutineUseCase.invoke(any()) }
+            Assert.assertEquals(venueList.map { it.mapToVenueUI() }, venuesViewModel.venueListLiveData.value)
+        }
+
+    }
+
+    @Test
+    fun lastQueryCoroutines_error() {
+        coEvery { lastQueryCoroutineUseCase.run(any()) } returns Either.left(TestException())
+        venuesViewModel.viewModelScope.launch {
+            venuesViewModel.lastQueryCoroutines()
+            verify(exactly = 1) {  lastQueryCoroutineUseCase.invoke(any()) }
+            Assert.assertEquals(UNHANDLE_ERROR_CODE, venuesViewModel.venueListLiveData.value)
+        }
     }
 
 }

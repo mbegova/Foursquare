@@ -44,7 +44,10 @@ class LastQueryFragment : Fragment() {
             initAdapter(venue, view)
             setVenuesLiveData()
             showLoadingState()
-            venuesViewModel.lastQuery()
+            //Uncomment to test with coroutines
+            venuesViewModel.lastQueryCoroutines()
+            //Uncomment to test with rxjava
+            //venuesViewModel.lastQuery()
         } else {
             showErrorPopup()
         }
