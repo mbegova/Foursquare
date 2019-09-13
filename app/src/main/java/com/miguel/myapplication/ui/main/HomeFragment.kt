@@ -24,7 +24,8 @@ class HomeFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         activity?.window?.setSoftInputMode(
-            WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+            WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN
+        );
     }
 
     override fun onCreateView(
@@ -36,7 +37,7 @@ class HomeFragment : Fragment() {
         parent = inflater.inflate(R.layout.fragment_main, container, false)
 
         parent.btn_search.setOnClickListener {
-            if(validateCity() && validateVenue()) {
+            if (validateCity() && validateVenue()) {
                 val city = parent.main_fragment_city_it.text.toString()
                 val venue = parent.main_fragment_venue_it.text.toString()
                 val bundle = bundleOf(
@@ -45,6 +46,16 @@ class HomeFragment : Fragment() {
                 )
                 navigation.navigateSafe(R.id.action_home_to_search, bundle)
             }
+        }
+
+        parent.btn_last_query.setOnClickListener {
+
+            val venue = "LAST QUERY"
+            val bundle = bundleOf(
+                ARG_VENUE to venue
+            )
+            navigation.navigateSafe(R.id.action_home_to_last_query, bundle)
+
         }
 
         return parent

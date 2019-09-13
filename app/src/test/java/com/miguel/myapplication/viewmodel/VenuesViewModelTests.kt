@@ -6,7 +6,9 @@ import com.bridgeinternationalacademies.letsmark.utils.TestException
 import com.miguel.myapplication.datasource.API_ERROR
 import com.miguel.myapplication.datasource.Resource
 import com.miguel.myapplication.datasource.UNHANDLE_ERROR_CODE
+import com.miguel.myapplication.datasource.local.entities.VenueData
 import com.miguel.myapplication.datasource.remote.*
+import com.miguel.myapplication.usecase.LastQueryUseCase
 import com.miguel.myapplication.usecase.SearchVenuesUseCase
 import io.mockk.every
 import io.mockk.mockk
@@ -20,6 +22,7 @@ import org.junit.rules.TestRule
 
 class VenuesViewModelTests {
     lateinit var searchVenuesUseCase: SearchVenuesUseCase
+    lateinit var lastQueryUseCase: LastQueryUseCase
     private lateinit var venuesViewModel: VenuesViewModel
 
     @get:Rule
@@ -32,7 +35,8 @@ class VenuesViewModelTests {
     @Before
     fun setup() {
         searchVenuesUseCase = mockk(relaxed = true)
-        venuesViewModel = VenuesViewModel(searchVenuesUseCase)
+        lastQueryUseCase = mockk(relaxed = true)
+        venuesViewModel = VenuesViewModel(searchVenuesUseCase, lastQueryUseCase)
     }
 
     @Test
@@ -63,8 +67,7 @@ class VenuesViewModelTests {
         testSingle.assertNoErrors()
         testSingle.assertValue(venueDataResponseResource)
 
-        verify(exactly = 1) { searchVenuesUseCase.run(any()) }
-        Assert.assertEquals(venueList, venuesViewModel.venueListLiveData.value)
+        Assert.assertEquals(venueList.map { it.mapToVenueUI() }, venuesViewModel.venueListLiveData.value)
     }
 
     @Test
@@ -86,7 +89,6 @@ class VenuesViewModelTests {
         testSingle.assertNoErrors()
         testSingle.assertValue(venueDataResponseResource)
 
-        verify(exactly = 1) { searchVenuesUseCase.run(any()) }
         Assert.assertEquals(emptyList<Venue>(), venuesViewModel.venueListLiveData.value)
     }
 
@@ -110,7 +112,6 @@ class VenuesViewModelTests {
         testSingle.assertNoErrors()
         testSingle.assertValue(venueDataResponseResource)
 
-        verify(exactly = 1) { searchVenuesUseCase.run(any()) }
         Assert.assertEquals(API_ERROR, venuesViewModel.errorLiveData.value)
     }
 
@@ -134,8 +135,58 @@ class VenuesViewModelTests {
         testSingle.assertNotComplete()
         testSingle.assertError(exception)
 
-        verify(exactly = 1) { searchVenuesUseCase.run(any()) }
         Assert.assertEquals(UNHANDLE_ERROR_CODE, venuesViewModel.errorLiveData.value)
+    }
+
+    @Test
+    fun lastQuery_success() {
+        val venueId1 = 1L
+        val name1 ="name1"
+        val address1="address1"
+        val postCode1= "postCode1"
+        val venueId2 = 2L
+        val name2 ="name2"
+        val address2="address2"
+        val postCode2= "postCode2"
+        val venue1=  VenueData(venueId1, name1, address1, postCode1)
+        val venue2=  VenueData(venueId2, name2, address2, postCode2)
+        val venueList = listOf(venue1, venue2)
+
+        val single = Single.just<List<VenueData>>(venueList)
+
+        every { lastQueryUseCase.run(any()) } returns single
+
+        venuesViewModel.lastQuery()
+
+        verify(exactly = 1) {lastQueryUseCase.run(any())  }
+
+        val testSingle = single.test()
+        testSingle.assertComplete()
+        testSingle.assertNoErrors()
+        testSingle.assertValue(venueList)
+
+        Assert.assertEquals(venueList.map { it.mapToVenueUI() }, venuesViewModel.venueListLiveData.value)
+    }
+
+
+
+    @Test
+    fun lastQuery_exception() {
+
+        val exception = TestException()
+        val single = Single.error<List<VenueData>>(exception)
+        every { lastQueryUseCase.run(any()) } returns single
+
+        venuesViewModel.lastQuery()
+
+        verify(exactly = 1) {lastQueryUseCase.run(any())  }
+
+        val testSingle = single.test()
+        testSingle.assertNotComplete()
+        testSingle.assertError(exception)
+
+        Assert.assertEquals(UNHANDLE_ERROR_CODE, venuesViewModel.errorLiveData.value)
+
     }
 
 }

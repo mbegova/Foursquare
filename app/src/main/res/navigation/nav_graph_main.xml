@@ -8,7 +8,12 @@
         <action android:id="@+id/action_home_to_search" app:destination="@id/searchFragment"
                 app:enterAnim="@anim/nav_default_enter_anim" app:exitAnim="@anim/nav_default_exit_anim"
                 app:popEnterAnim="@anim/nav_default_pop_enter_anim" app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
+        <action android:id="@+id/action_home_to_last_query" app:destination="@id/lastQueryFragment"
+                app:enterAnim="@anim/nav_default_enter_anim" app:exitAnim="@anim/nav_default_exit_anim"
+                app:popEnterAnim="@anim/nav_default_pop_enter_anim" app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
     </fragment>
     <fragment android:id="@+id/searchFragment" android:name="com.miguel.myapplication.ui.main.SearchFragment"
               android:label="SearchFragment"/>
+    <fragment android:id="@+id/lastQueryFragment" android:name="com.miguel.myapplication.ui.main.LastQueryFragment"
+              android:label="LastQueryFragment"/>
 </navigation>

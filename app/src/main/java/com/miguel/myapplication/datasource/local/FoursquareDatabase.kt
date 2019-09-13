@@ -6,7 +6,7 @@ import com.miguel.myapplication.datasource.local.entities.VenueData
 
 @Database(
     entities = [VenueData::class],
-    version = 1, exportSchema = false
+    version = 2, exportSchema = false
 )
 abstract class FoursquareDatabase : RoomDatabase() {
 

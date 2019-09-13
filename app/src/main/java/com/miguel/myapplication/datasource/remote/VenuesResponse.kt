@@ -1,5 +1,7 @@
 package com.miguel.myapplication.datasource.remote
 
+import com.miguel.myapplication.datasource.local.entities.VenueData
+
 data class VenueDataResponse(
 
     val meta: Meta? = null,
@@ -24,7 +26,12 @@ data class Venue(
     val categories: List<Category>? = null,
     val referralId: String? = null,
     val hasPerk: Boolean? = null
-)
+){
+
+    fun mapToVenueUI() = com.miguel.myapplication.datasource.ui.Venue(name, location?.address, location?.postalCode)
+
+    fun mapToVenueDB() = VenueData(name = name, address= location?.address, postCode = location?.postalCode)
+}
 
 data class Location(
     val address: String? = null,
